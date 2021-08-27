@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\authControllers;
 use App\Http\Controllers\dashboardControllers;
+use App\Http\Controllers\keranjangControllers;
 use App\Http\Controllers\menuControllers;
+use App\Http\Controllers\tokoControllers;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,8 +24,11 @@ Route::get('/kategori/{nama}/{id}/', [menuControllers::class,'kategori_show'])->
 Route::get('/kategori/{kategori}/{nama}/{id}', [menuControllers::class,'kategori_sub_show'])->name('kategorisub');
 Route::get('/produk/detail/{nama}/{id}', [menuControllers::class,'Detail_Produk'])->name('detailproduk');
 
+Route::get('/toko/{id_toko}', [tokoControllers::class,'index'])->name('toko');
+
 
 Route::get('/login', [authControllers::class,'login'])->name('login');
+
 Route::post('/login', [authControllers::class,'login_akses'])->name('login');
 
 Route::get('/daftar', [authControllers::class,'daftar'])->name('daftar');
@@ -37,5 +42,18 @@ Route::get('/profil/detail', [authControllers::class,'profil_detail'])->name('pr
 Route::post('/profil/biodata', [authControllers::class,'profil_biodata'])->name('profildetailbiodata');
 Route::post('/profil/foto', [authControllers::class,'profil_upload'])->name('profildetailfoto');
 Route::post('/profil/password', [authControllers::class,'profil_password'])->name('profildetailpassword');
+
+Route::get('/keranjang', [keranjangControllers::class,'index'])->name('keranjang');
+Route::get('/keranjang/pembayaran/{id_toko}', [keranjangControllers::class,'bayar_keranjang'])->name('keranjangbayar');
+
+
+
 Route::get('/keluar', [authControllers::class,'logout'])->name('logout');
+Route::post('/simpan/produk/belanja', [keranjangControllers::class,'simpan'])->name('simpanproduk');
+Route::post('/simpan/produk/belanja/stok', [keranjangControllers::class,'edit_stok_keranjang'])->name('stokkeranjang');
+Route::post('/simpan/produk/belanja/hapus', [keranjangControllers::class,'hapus_stok_keranjang'])->name('hapuskeranjang');
+
+
+
+
 

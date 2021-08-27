@@ -28,7 +28,7 @@
             @if (session()->has('login_user'))
                 <div class="header-right">
                     <div class="wishlist">
-                        <a href="wishlist.html" title="Wishlist">
+                        <a href="{{ route('keranjang') }}" title="Wishlist">
                             <div class="icon">
                                 <i class="icon-cart-arrow-down"></i>
                             </div>

@@ -26,63 +26,63 @@
                     </div><!-- End .col-md-6 -->
 
                     <div class="col-md-6">
-                        <div class="product-details">
-                            <h1 class="product-title">{{ $detail_produk->nama_produk }}</h1><!-- End .product-title -->
+                        <form  method="POST" action="{{ route('simpanproduk') }}" >
+                            @csrf
+                            <div class="product-details">
+                                <h1 class="product-title">{{ $detail_produk->nama_produk }}</h1><!-- End .product-title -->
 
-                            <div class="ratings-container">
-                                <div class="ratings">
-                                    @if ($detail_produk->rating > 3)
-                                        <div class="ratings-val" style="width: 50%;"></div>
+                                <div class="ratings-container">
+                                    <div class="ratings">
+                                        @if ($detail_produk->rating > 3)
+                                            <div class="ratings-val" style="width: 50%;"></div>
 
-                                    @elseif ($detail_produk->rating > 4)
-                                        <div class="ratings-val" style="width: 80%;"></div>
+                                        @elseif ($detail_produk->rating > 4)
+                                            <div class="ratings-val" style="width: 80%;"></div>
 
+                                        @else
+                                            <div class="ratings-val" style="width: 10%;"></div>
+
+                                        @endif
+                                    </div><!-- End .ratings -->
+                                    <a class="ratings-text" href="#product-review-link" id="review-link">(
+                                        {{ $detail_produk->total }} )</a>
+                                </div><!-- End .rating-container -->
+
+                                <div class="product-price">
+                                    @if ($detail_produk->diskon_produk == 0)
+
+                                        {{ 'Rp ' . number_format($detail_produk->harga_produk, 0, ',', '.') }}
                                     @else
-                                        <div class="ratings-val" style="width: 10%;"></div>
-
+                                        <del
+                                            class="text-dark">{{ 'Rp ' . number_format($detail_produk->harga_produk, 0, ',', '.') }}</del>&nbsp;
+                                        {{ 'Rp ' . number_format($detail_produk->harga_produk * ($detail_produk->diskon_produk / 100), 0, ',', '.') }}
                                     @endif
-                                </div><!-- End .ratings -->
-                                <a class="ratings-text" href="#product-review-link" id="review-link">(
-                                    {{ $detail_produk->total }} )</a>
-                            </div><!-- End .rating-container -->
+                                </div><!-- End .product-price -->
 
-                            <div class="product-price">
-                                @if ($detail_produk->diskon_produk == 0)
+                                <input type="hidden" name="id_produk" value="{{$detail_produk->id_produk}}">
+                                <input type="hidden" name="nomor_hp_toko" value="{{$toko->nomor_hp_toko}}">
+                                <div class="details-filter-row details-row-size">
+                                    <label for="qty">Stok:</label>
+                                    <div class="product-details-quantity">
+                                        <p>{{ $detail_produk->stok_produk }}</p>
+                                    </div><!-- End .product-details-quantity -->
+                                </div><!-- End .details-filter-row -->
+                                <div class="details-filter-row">
+                                    <label for="qty">Qty:</label>
+                                    <div class="product-details-quantity">
+                                        <input type="number" id="qty" class="form-control" value="1" min="1"
+                                            max="{{ $detail_produk->stok_produk }}" step="1" data-decimals="0" name="stok" required>
+                                    </div><!-- End .product-details-quantity -->
+                                </div><!-- End .details-filter-row -->
+                                <div class="product-action-inner">
 
-                                    {{ 'Rp ' . number_format($detail_produk->harga_produk, 0, ',', '.') }}
-                                @else
-                                    <del
-                                        class="text-dark">{{ 'Rp ' . number_format($detail_produk->harga_produk, 0, ',', '.') }}</del>&nbsp;
-                                    {{ 'Rp ' . number_format($detail_produk->harga_produk * ($detail_produk->diskon_produk / 100), 0, ',', '.') }}
-                                @endif
-                            </div><!-- End .product-price -->
-
-
-
-                            <div class="details-filter-row details-row-size">
-                                <label for="qty">Stok:</label>
-                                <div class="product-details-quantity">
-                                    <p>{{ $detail_produk->stok_produk }}</p>
-                                </div><!-- End .product-details-quantity -->
-                            </div><!-- End .details-filter-row -->
-                            <div class="details-filter-row">
-                                <label for="qty">Qty:</label>
-                                <div class="product-details-quantity">
-                                    <input type="number" id="qty" class="form-control" value="1" min="1"
-                                        max="{{ $detail_produk->stok_produk }}" step="1" data-decimals="0" required>
-                                </div><!-- End .product-details-quantity -->
-                            </div><!-- End .details-filter-row -->
-                            <div class="product-action-inner">
-
-                                <div class="details-action-col">
-                                    <a href="#" class="btn btn-danger col-sm-6 m-1 rounded-sm"><span>Penawaran</span></a>
-                                    <a href="#" class="btn btn-primary col-sm-6 m-1 rounded-sm"><span>Keranjang</span></a>
-                                </div><!-- End .details-action-wrapper -->
-
-
-
-                            </div><!-- End .product-details-action -->
-                        </div><!-- End .product-details -->
+                                    <div class="details-action-col">
+                                        <button type="submit" class="btn btn-danger col-sm-6 m-1 rounded-sm" name="status" value="penawaran"><span>Penawaran</span></button>
+                                        <button type="submit" class="btn btn-primary col-sm-6 m-1 rounded-sm" name="status" value="keranjang"><span>Keranjang</span></button>
+                                    </div><!-- End .details-action-wrapper -->
+                                </div><!-- End .product-details-action -->
+                            </div><!-- End .product-details -->
+                        </form>
                     </div><!-- End .col-md-6 -->
                 </div><!-- End .row -->
             </div><!-- End .product-details-top -->
@@ -199,6 +199,7 @@
                                     </div>
                                     <p class="product-title mt-2">Keterangan</p>
                                     <p>{!!$toko->keterangan_toko!!}</p>
+                                    <button class="btn btn-warning text-white col mt-2" onclick="window.location='{{ route('toko',$toko->id_toko_penjual) }}'">Lihat Toko</button>
                                 </div><!-- End .col-6 -->
                             </div>
                         </div><!-- End .product-desc-content -->
@@ -272,5 +273,4 @@
 @endsection
 
 @section('javascript')
-
 @endsection
