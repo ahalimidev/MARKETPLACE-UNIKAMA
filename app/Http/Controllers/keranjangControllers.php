@@ -118,17 +118,39 @@ class keranjangControllers extends Controller
         }
     }
 
-    public function bayar_keranjang(Request $request,$id_toko){
+    public function bayar_keranjang(Request $request,$id_transaksi_sementara){
         $menu_kategori = DB::select("SELECT * from kategori");
 
          $id =  $request->session()->get('id_user');
          $data = $request->query('keyword');
+         $sum = 0;
+         $toko = DB::table('transaksi_sementara')
+         ->select('toko_penjual.id_toko_penjual', 'toko_penjual.nama_toko')
+         ->leftJoin('produk', 'produk.id_produk', '=', 'transaksi_sementara.id_produk')
+         ->leftJoin('toko_penjual', 'produk.id_toko_penjual', '=', 'toko_penjual.id_toko_penjual')
+         ->where('transaksi_sementara.id_transaksi_sementara',$id_transaksi_sementara)->where('transaksi_sementara.id_user',$id)
+         ->groupBy('toko_penjual.id_toko_penjual')->first();
 
+         $kurir = DB::table('kurir_toko_penjual')
+         ->select('kurir.nama_kurir','kurir_toko_penjual.id_kecamatan')
+         ->leftJoin('kurir','kurir.id_kurir','=','kurir_toko_penjual.id_kurir')
+         ->where('kurir_toko_penjual.status','1')
+         ->where('kurir_toko_penjual.id_toko_penjual',$toko->id_toko_penjual)
+         ->whereNotNull('kurir.nama_kurir')
+         ->get();
+
+         $keranjang = DB::table('transaksi_sementara')
+         ->select('transaksi_sementara.id_transaksi_sementara','produk.nama_produk','transaksi_sementara.harga_produk','transaksi_sementara.stok_produk','transaksi_sementara.berat_produk','transaksi_sementara.diskon_produk','transaksi_sementara.penawaran_produk')
+         ->leftJoin('produk','produk.id_produk','=','transaksi_sementara.id_produk')
+         ->where('transaksi_sementara.id_transaksi_sementara',$id_transaksi_sementara)->where('transaksi_sementara.id_user',$id)->get();
+
+         //return $keranjang;
          if ($data != null) {
              $qx = "keyword=" . $data;
              return redirect()->route('pencarian', $qx);
          }
-         return view('produk.keranjang_bayar', compact('menu_kategori'));
+         return view('produk.keranjang_bayar', compact('menu_kategori','keranjang','toko','kurir'));
+
     }
 
 }

@@ -44,7 +44,7 @@ Route::post('/profil/foto', [authControllers::class,'profil_upload'])->name('pro
 Route::post('/profil/password', [authControllers::class,'profil_password'])->name('profildetailpassword');
 
 Route::get('/keranjang', [keranjangControllers::class,'index'])->name('keranjang');
-Route::get('/keranjang/pembayaran/{id_toko}', [keranjangControllers::class,'bayar_keranjang'])->name('keranjangbayar');
+Route::get('/keranjang/pembayaran/{id_transaksi_sementara}', [keranjangControllers::class,'bayar_keranjang'])->name('keranjangbayar');
 
 
 

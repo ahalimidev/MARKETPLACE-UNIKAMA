@@ -125,11 +125,11 @@
                                         <td></td>
                                         <td class="price-col">
                                             @if ($item_ok['status_transaksi'] == 'keranjang')
-                                                <a href="{{ route('keranjangbayar',['id_toko' => $item['id_toko_penjual'] ]) }}" class="btn btn-info m-2" style="border-radius: 10px;">Bayar</a>
+                                                <a href="{{ route('keranjangbayar',['id_transaksi_sementara' => $item_ok['id_transaksi_sementara'] ]) }}" class="btn btn-info m-2" style="border-radius: 10px;">Bayar</a>
                                                 <a href="{{ $data }}" class="btn btn-danger m-2 " style="border-radius: 10px;" >Penawaran</a>
                                                 <a href="{{ $data }}" class="btn btn-warning m-2" style="border-radius: 10px;" >Chat</a>
                                             @elseif ($item_ok['status_transaksi'] == "penawaran")
-                                            <a href="{{ route('keranjangbayar',['id_toko' => $item['id_toko_penjual'] ]) }}" class="btn btn-info m-2" style="border-radius: 10px;">Bayar</a>
+                                            <a href="{{ route('keranjangbayar',['id_transaksi_sementara' => $item_ok['id_transaksi_sementara'] ]) }}" class="btn btn-info m-2" style="border-radius: 10px;">Bayar</a>
                                             <a href="{{ $data }}" class="btn btn-warning m-2" style="border-radius: 10px;" >Chat</a>
                                             @elseif ($item_ok['status_transaksi'] == "dibayar")
                                                 <a href="{{ $data }}" class="btn btn-primary m-2" style="border-radius: 10px;">Konfrimasi</a>

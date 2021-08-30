@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\wilyahControllers;
+use App\Http\Controllers\rajaongkirControllers;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,3 +19,13 @@ Route::get('/wilyah_provinsi', [wilyahControllers::class,'provinsi']);
 Route::get('/wilyah_kabupaten/{id}', [wilyahControllers::class,'kabupaten']);
 Route::get('/wilyah_kecamatan/{id}', [wilyahControllers::class,'kecamatan']);
 Route::get('/wilyah_desa/{id}', [wilyahControllers::class,'desa']);
+
+Route::group(['prefix' => 'gateway'], function () {
+    Route::get('/provinsi',  [rajaongkirControllers::class,'provinsi']);
+    Route::get('/kota',  [rajaongkirControllers::class,'kota']);
+    Route::get('/kotaId',  [rajaongkirControllers::class,'kotaId']);
+    Route::get('/kecamatan',  [rajaongkirControllers::class,'kecamatan']);
+    Route::get('/kecamatanId',  [rajaongkirControllers::class,'kecamatanId']);
+});
+
+Route::post('/ongkir', [rajaongkirControllers::class,'ongkir']);
