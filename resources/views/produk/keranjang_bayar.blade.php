@@ -21,7 +21,7 @@
                     <p class="form-control" id="alamat_pengriman"></p>
                     <Button class="btn btn-primary btn-sm mb-2" style="border-radius: 10px;" id="tambahAlamat">Tambah
                         Alamat</Button>
-                    <table class="table table-cart table-mobile" id="tabel-keranjang">
+                    <table class="table table-mobile" id="tabel-keranjang">
                         <thead>
                             <tr>
                                 <th>Nomor</th>
@@ -39,13 +39,14 @@
                                 $nomor = 1;
                                 $sum = 0;
                             @endphp
-                            <tr>
-                                @foreach ($keranjang as $item)
+                            @foreach ($keranjang as $item)
+                                <tr>
                                     <td>{{ $nomor++ }}</td>
+                                    <td id="id_keranjang" hidden>{{ $item->id_transaksi_sementara }}</td>
                                     <td>{{ $item->nama_produk }}</td>
                                     <td>{{ $item->harga_produk }}</td>
                                     <td>{{ $item->penawaran_produk }}</td>
-                                    <td>{{ $item->berat_produk }}</td>
+                                    <td id="berat_produk">{{ $item->berat_produk }}</td>
                                     <td>{{ $item->diskon_produk }}</td>
                                     <td>{{ $item->stok_produk }}</td>
                                     <td>
@@ -64,11 +65,21 @@
                                             }
                                         @endphp
                                     </td>
-                                @endforeach
-                            </tr>
+                                </tr>
+                            @endforeach
+
                         </tbody>
                     </table><!-- End .table table-wishlist -->
                     <div class="row">
+
+                        <div class="col-sm-6">
+
+                            <h5>Pilih Jasa Pengiriman</h5>
+                            <div id="total_belanja"></div>
+                            <Button class="btn btn-primary btn-sm" style="border-radius: 10px;" id="tambah_kurir"
+                                type="button" disabled>Tambah Kurir</Button>
+
+                        </div>
                         <div class="col-sm-6">
                             <table style="width:100%" class="mb-5">
                                 <tr>
@@ -81,39 +92,15 @@
                                 </tr>
                                 <tr>
                                     <th>Ongkir:</th>
-                                    <td>-</td>
+                                    <th id="total_ongkir">-</th>
                                 </tr>
                                 <tr>
                                     <th>Total Pembayaran:</th>
-                                    <td>-</td>
+                                    <th id="total_dibayar">-</th>
                                 </tr>
                             </table>
-
-                        </div>
-                        <div class="col-sm-6">
-
-                            <h5>Pilih Jasa Pengiriman</h5>
-                            <table class="table">
-                                <tr>
-                                    <td>Kurir:</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>Service:</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>Ongkir:</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>Waktu:</td>
-                                    <td>-</td>
-                                </tr>
-                            </table>
-                            <Button class="btn btn-primary btn-sm col" style="border-radius: 10px;" id="tambah_kurir"
-                                type="button">Tambah Kurir</Button>
-
+                            <Button class="btn btn-danger btn-sm" style="border-radius: 10px;" id="transaksi" type="button"
+                                disabled>Selesai</Button>
                         </div>
                     </div><!-- End .col-lg-9 -->
                 </div>
@@ -167,7 +154,8 @@
                                         <select name="kecamatan" id="kecamatan" class="form-control" disabled required>
                                             <option>---PILIH KECAMATAN---</option>
                                         </select>
-                                        <input type="hidden" name="nama_kecamatan" id="nama_kecamatan" class="form-control">
+                                        <input type="hidden" name="nama_kecamatan" id="nama_kecamatan"
+                                            class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -232,9 +220,13 @@
 
     <script>
         $(document).ready(function() {
+
+
+            var hasil_ongkir = "";
+            var hasil_service = "";
+
+
             let input = document.querySelector('#phone');
-            var n;
-            var id_keranjang = [];
             var iti = intlTelInput(input, {
                 initialCountry: "id",
                 allowDropdown: true,
@@ -344,6 +336,7 @@
     <script>
         /* attach a submit handler to the form */
         $("#formalamat").submit(function(event) {
+            $('.ok').remove();
 
             /* stop form from submitting normally */
             event.preventDefault();
@@ -367,6 +360,7 @@
             $('#modalAlamat').modal('toggle');
             $('button[id="tambah_kurir"]').removeAttr('disabled');
 
+
         });
         $("#pilih_kurir").on('change', function() {
             var value = $(this).children(":selected").attr("value");
@@ -377,7 +371,7 @@
                 "_token": "{{ csrf_token() }}",
                 "asal": split[1],
                 "tujuan": id_kecamatan,
-                "berat": 1700,
+                "berat": document.getElementById("berat_produk").innerHTML + "000",
                 "kurir": split[0],
             }
             console.log(dataku);
@@ -388,6 +382,7 @@
                 data: dataku,
 
                 success: function(response) {
+                    $('.ok').remove();
                     response.ongkir.rajaongkir.results[0].costs.map(e => {
                         $("#kurir").append(`
                             <div class="ok">
@@ -398,19 +393,92 @@
                             </div>
                         `);
                     });
+                    $("input[name='ongkir']").on('click', function() {
+                        let kurir = $("#pilih_kurir").val();
+                        let service = $(this).data('service');
+                        let ongkir = $(this).data('ongkir');
+                        let etd = $(this).data('etd');
+                        $("#modalPilihKurir").modal('hide');
+                        $("#total_belanja").append(`
+                        <table class="table">
+                            <tr>
+                                    <th>Kurir:</th>
+                                    <td>${split[0]}</td>
+                                </tr>
+                                <tr>
+                                    <th>Service:</th>
+                                    <td>${service}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ongkir:</th>
+                                    <td>${"Rp "+numberFormat(ongkir)}</td>
+                                </tr>
+                                <tr>
+                                    <th>Waktu:</th>
+                                    <td>${etd}</td>
+                                </tr>
+                        </table>
+                        `)
+                        document.getElementById("total_ongkir").innerHTML = "Rp " +
+                            numberFormat(ongkir);
+                         hasil_ongkir = ongkir;
+                         hasil_service = service+"-"+split[0];
+                        document.getElementById("total_dibayar").innerHTML = "Rp " +
+                            numberFormat(parseInt("{{ $sum }}") + ongkir);
+                        $('button[id="transaksi"]').removeAttr('disabled');
+
+                    });
+
                 },
                 error: function(error) {
                     console.log(error);
                 }
             });
         });
+
+        $("button[id = 'transaksi']").on('click', function() {
+
+
+            let z_id_toko = "{{ $toko->id_toko_penjual }}";
+            let z_total_bayar_barang = "{{ $sum }}";
+            let z_total_bayar_kurir = hasil_ongkir;
+            let z_jasa_kurir = hasil_service;
+            let z_lokasi_pengiriman = document.getElementById("alamat_pengriman").innerHTML;
+
+            var id_keranjang = "";
+                $("#tabel-keranjang tbody tr").map(function() {
+                    var $this = $(this);
+                    id_keranjang = $this.find("#id_keranjang").text();
+            });
+            var datakuz = {
+                "_token": "{{ csrf_token() }}",
+                "z_id_user" : "{{Session::get('id_user')}}",
+                "z_id_toko": z_id_toko,
+                "z_total_bayar_barang": z_total_bayar_barang,
+                "z_total_bayar_kurir": z_total_bayar_kurir,
+                "z_jasa_kurir": z_jasa_kurir,
+                "z_lokasi_pengiriman": z_lokasi_pengiriman,
+                "z_id_transaksi_semsentara": id_keranjang,
+            }
+            console.log(datakuz);
+            $.ajax({
+                async: true,
+                url: "{{ URL::to('api/transaksi/one') }}",
+                type: 'POST',
+                data: datakuz,
+                success: function(response) {
+                     window.location.href="{{route('profil')}}";
+                },
+                error: function(error) {
+                    console.log(error);
+
+                }
+            });
+        });
     </script>
     <script>
-
         function numberFormat(num) {
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
         }
-
-
     </script>
 @endsection

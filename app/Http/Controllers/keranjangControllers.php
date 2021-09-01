@@ -153,4 +153,49 @@ class keranjangControllers extends Controller
 
     }
 
+    public function simpan_transaksi(Request $request){
+        $id =  $request->z_id_user;
+        $toko = DB::table('toko_penjual')->select("nama_toko")->where('id_toko_penjual',$request->z_id_toko)->first();
+        $kode_transaksi = time()."$toko->nama_toko".date('M-Y');
+        $simpan = DB::table('transaksi')
+        ->insertGetId([
+            "id_user"=>$id, "id_toko"=> $request->z_id_toko,
+             "nomor_transaksi"=>$kode_transaksi,"total_bayar_barang"=>$request->z_total_bayar_barang,
+             "total_bayar_kurir"=>$request->z_total_bayar_kurir,
+             "jasa_kurir"=>$request->z_jasa_kurir,"lokasi_pengiriman"=>$request->z_lokasi_pengiriman,"konfirmasi" =>"konfrimasi"
+        ]);
+        $keranjang = DB::table('transaksi_sementara')->where('id_transaksi_sementara',$request->z_id_transaksi_semsentara)->first();
+        if($keranjang){
+            if($keranjang->penawaran_produk){
+                DB::table('transaksi_detail')->insert([
+                    "id_transaksi" => $simpan,
+                    "id_produk"=>$keranjang->id_produk,
+                    "harga_produk"=>$keranjang->harga_produk,
+                    "stok_produk"=>$keranjang->stok_produk,
+                    "berat_produk"=>$keranjang->berat_produk,
+                    "diskon_produk"=>$keranjang->diskon_produk,
+                    "penawaran_produk"=>$keranjang->penawaran_produk,
+                    "tanggal_penawaran"=>$keranjang->tanggal_penawaran,
+                    "status"=>"konfrimasi",
+                ]);
+            }else{
+                DB::table('transaksi_detail')->insert([
+                    "id_transaksi" => $simpan,
+                    "id_produk"=>$keranjang->id_produk,
+                    "harga_produk"=>$keranjang->harga_produk,
+                    "stok_produk"=>$keranjang->stok_produk,
+                    "berat_produk"=>$keranjang->berat_produk,
+                    "diskon_produk"=>$keranjang->diskon_produk,
+                    "status"=>"konfrimasi",
+                ]);
+            }
+
+
+            DB::delete('delete from transaksi_sementara where id_transaksi_sementara = ?', [$request->z_id_transaksi_semsentara]);
+
+
+            return true;
+        }
+    }
+
 }

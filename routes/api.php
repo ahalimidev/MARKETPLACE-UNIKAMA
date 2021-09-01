@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\keranjangControllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\wilyahControllers;
@@ -29,3 +30,4 @@ Route::group(['prefix' => 'gateway'], function () {
 });
 
 Route::post('/ongkir', [rajaongkirControllers::class,'ongkir']);
+Route::post('/transaksi/one', [keranjangControllers::class,'simpan_transaksi']);
