@@ -45,6 +45,7 @@ Route::post('/profil/password', [authControllers::class,'profil_password'])->nam
 
 Route::get('/keranjang', [keranjangControllers::class,'index'])->name('keranjang');
 Route::get('/keranjang/pembayaran/{id_transaksi_sementara}', [keranjangControllers::class,'bayar_keranjang'])->name('keranjangbayar');
+Route::get('/keranjang/pembayaran/toko/{id_toko_penjual}', [keranjangControllers::class,'bayar_keranjang_all'])->name('keranjangbayarall');
 
 
 
@@ -52,6 +53,7 @@ Route::get('/keluar', [authControllers::class,'logout'])->name('logout');
 Route::post('/simpan/produk/belanja', [keranjangControllers::class,'simpan'])->name('simpanproduk');
 Route::post('/simpan/produk/belanja/stok', [keranjangControllers::class,'edit_stok_keranjang'])->name('stokkeranjang');
 Route::post('/simpan/produk/belanja/hapus', [keranjangControllers::class,'hapus_stok_keranjang'])->name('hapuskeranjang');
+Route::get('/update/produk/penawran/{id_transaksi_sementara}', [keranjangControllers::class,'penawaran'])->name('keranjangpenawaran');
 
 
 

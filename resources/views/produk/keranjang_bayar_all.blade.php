@@ -466,12 +466,11 @@
                 "z_total_bayar_kurir": z_total_bayar_kurir,
                 "z_jasa_kurir": z_jasa_kurir,
                 "z_lokasi_pengiriman": z_lokasi_pengiriman,
-                "z_id_transaksi_semsentara": id_keranjang,
             }
             console.log(datakuz);
             $.ajax({
                 async: true,
-                url: "{{ URL::to('api/transaksi/one') }}",
+                url: "{{ URL::to('api/transaksi/all') }}",
                 type: 'POST',
                 data: datakuz,
                 success: function(response) {

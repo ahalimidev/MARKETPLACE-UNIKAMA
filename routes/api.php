@@ -31,3 +31,4 @@ Route::group(['prefix' => 'gateway'], function () {
 
 Route::post('/ongkir', [rajaongkirControllers::class,'ongkir']);
 Route::post('/transaksi/one', [keranjangControllers::class,'simpan_transaksi']);
+Route::post('/transaksi/all', [keranjangControllers::class,'simpan_transaksi_all']);

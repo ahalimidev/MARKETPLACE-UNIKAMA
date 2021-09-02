@@ -105,7 +105,7 @@
     <div class="products">
         <div class="row justify-content-center">
 
-            @foreach ($telaris as $item)
+            @foreach ($terbaru as $item)
             <div class="col-6 col-md-3 col-lg-3">
                 <div class="product shadow-sm bg-white rounded">
                     <figure class="product-media">

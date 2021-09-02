@@ -57,12 +57,8 @@
                 <h4 class="card-title p-4 text-center">Transaksi</h4>
 
                 <ul class="nav nav-tabs profile-tab" role="tablist">
-                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#penawaran" role="tab"
-                            aria-expanded="true">Penawaran</a> </li>
-                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#belumbayar" role="tab"
-                            aria-expanded="false">Harus Dibayar</a> </li>
                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#konfrimasitransaksi" role="tab"
-                            aria-expanded="false">Konfrimasi Transaksi</a> </li>
+                            aria-expanded="false">Pembayaran</a> </li>
 
                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#pengriman" role="tab"
                             aria-expanded="false">Pengiriman</a> </li>
@@ -75,17 +71,8 @@
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div class="tab-pane" id="penawaran" role="tabpanel" aria-expanded="true">
-                        <div class="card-block">
 
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="belumbayar" role="tabpanel" aria-expanded="false">
-                        <div class="card-block">
-
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="konfrimasitransaksi" role="tabpanel" aria-expanded="false">
+                    <div class="tab-pane active" id="konfrimasitransaksi" role="tabpanel" aria-expanded="true">
                         <div class="card-block">
 
                         </div>
