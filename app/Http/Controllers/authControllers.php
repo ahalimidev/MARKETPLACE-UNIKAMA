@@ -135,6 +135,52 @@ class authControllers extends Controller
     public function profil(Request $request)
     {
         $id =  $request->session()->get('id_user');
+
+        $konfrimasi = DB::table('transaksi')
+        ->select('transaksi.id_transaksi','transaksi.nomor_transaksi','transaksi.nomor_resi','transaksi.total_bayar_barang',
+        'transaksi.total_bayar_kurir','transaksi.jasa_kurir',
+        'transaksi.lokasi_pengiriman','toko_penjual.nomor_hp_toko',DB::raw('count(transaksi_detail.id_transaksi) as total'),'transaksi.catatan_batal')
+        ->leftJoin('toko_penjual','toko_penjual.id_toko_penjual','=','transaksi.id_toko')
+        ->leftJoin('transaksi_detail','transaksi_detail.id_transaksi','=','transaksi.id_transaksi')
+        ->where('transaksi.konfirmasi','konfrimasi')
+        ->where('transaksi.id_user',$id)
+        ->orderByDesc('transaksi.id_transaksi')
+        ->paginate(5);
+
+        $selesai = DB::table('transaksi')
+        ->select('transaksi.id_transaksi','transaksi.nomor_transaksi','transaksi.nomor_resi','transaksi.total_bayar_barang',
+        'transaksi.total_bayar_kurir','transaksi.jasa_kurir',
+        'transaksi.lokasi_pengiriman','toko_penjual.nomor_hp_toko',DB::raw('count(transaksi_detail.id_transaksi) as total'),'transaksi.catatan_batal')
+        ->leftJoin('toko_penjual','toko_penjual.id_toko_penjual','=','transaksi.id_toko')
+        ->leftJoin('transaksi_detail','transaksi_detail.id_transaksi','=','transaksi.id_transaksi')
+        ->where('transaksi.konfirmasi','selesai')
+        ->where('transaksi.id_user',$id)
+        ->orderByDesc('transaksi.id_transaksi')
+        ->paginate(5);
+
+        $terima = DB::table('transaksi')
+        ->select('transaksi.id_transaksi','transaksi.nomor_transaksi','transaksi.nomor_resi','transaksi.total_bayar_barang',
+        'transaksi.total_bayar_kurir','transaksi.jasa_kurir',
+        'transaksi.lokasi_pengiriman','toko_penjual.nomor_hp_toko',DB::raw('count(transaksi_detail.id_transaksi) as total'),'transaksi.catatan_batal')
+        ->leftJoin('toko_penjual','toko_penjual.id_toko_penjual','=','transaksi.id_toko')
+        ->leftJoin('transaksi_detail','transaksi_detail.id_transaksi','=','transaksi.id_transaksi')
+        ->where('transaksi.konfirmasi','terima')
+        ->where('transaksi.id_user',$id)
+        ->orderByDesc('transaksi.id_transaksi')
+        ->paginate(5);
+
+        $batal = DB::table('transaksi')
+        ->select('transaksi.id_transaksi','transaksi.nomor_transaksi','transaksi.nomor_resi','transaksi.total_bayar_barang',
+        'transaksi.total_bayar_kurir','transaksi.jasa_kurir',
+        'transaksi.lokasi_pengiriman','toko_penjual.nomor_hp_toko',DB::raw('count(transaksi_detail.id_transaksi) as total'),'transaksi.catatan_batal')
+        ->leftJoin('toko_penjual','toko_penjual.id_toko_penjual','=','transaksi.id_toko')
+        ->leftJoin('transaksi_detail','transaksi_detail.id_transaksi','=','transaksi.id_transaksi')
+        ->where('transaksi.konfirmasi','batal')
+        ->where('transaksi.id_user',$id)
+        ->orderByDesc('transaksi.id_transaksi')
+        ->paginate(5);
+
+
         $menu_kategori = DB::select("SELECT * from kategori");
         $profil = collect(DB::select("SELECT user.*,provinces.name_provinces,regencies.name_regencies,districts.name_districts,villages.name_villages FROM user
         LEFT OUTER JOIN provinces on provinces.id_provinces = user.id_provinsi
@@ -148,7 +194,7 @@ class authControllers extends Controller
             $qx = "keyword=" . $data;
             return redirect()->route('pencarian', $qx);
         }
-        return view('auth.profil', compact('menu_kategori','profil'));
+        return view('auth.profil', compact('menu_kategori','profil','konfrimasi', 'selesai', 'terima', 'batal'));
     }
 
     public function profil_detail(Request $request)

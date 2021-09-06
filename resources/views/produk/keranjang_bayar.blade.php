@@ -38,9 +38,13 @@
                             @php
                                 $nomor = 1;
                                 $sum = 0;
+                                $berat = 0;
                             @endphp
                             @foreach ($keranjang as $item)
                                 <tr>
+                                    @php
+                                        $berat += $item->berat_produk ;
+                                    @endphp
                                     <td>{{ $nomor++ }}</td>
                                     <td id="id_keranjang" hidden>{{ $item->id_transaksi_sementara }}</td>
                                     <td>{{ $item->nama_produk }}</td>
@@ -379,7 +383,7 @@
                 "_token": "{{ csrf_token() }}",
                 "asal": split[1],
                 "tujuan": id_kecamatan,
-                "berat": document.getElementById("berat_produk").innerHTML + "000",
+                "berat": "{{$berat}}" + "000",
                 "kurir": split[0],
             }
             console.log(dataku);

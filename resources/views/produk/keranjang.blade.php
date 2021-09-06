@@ -148,7 +148,7 @@
                                             <a href="{{ route('keranjangpenawaran', ['id_transaksi_sementara' => $item_ok['id_transaksi_sementara']]) }}"
                                                 class="btn btn-danger m-2 " style="border-radius: 10px;">Penawaran</a>
                                             <a href="{{ $data }}" class="btn btn-warning m-2"
-                                                style="border-radius: 10px;">Chat</a>
+                                                style="border-radius: 10px;" target="_blank">Chat</a>
 
                                         @elseif ($item_ok['status_transaksi'] == "penawaran")
 
@@ -259,6 +259,8 @@
                     _token: '{{ csrf_token() }}',
                     'id_transaksi_sementara': id_transaksi_sementara,
                 };
+                console.log(data);
+
                 var current_object = $(this);
                 swal({
                     title: "Apakah Kamu yakin?",

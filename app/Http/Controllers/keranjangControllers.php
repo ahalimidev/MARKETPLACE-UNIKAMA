@@ -325,4 +325,14 @@ class keranjangControllers extends Controller
         }
         return true;
     }
+
+    public function hapus_konfrimasi_pembayaran(Request $request)
+    {
+        DB::update('update transaksi set konfirmasi = ? , catatan_batal = ? where id_transaksi = ?', ["batal","Pembatalan oleh Pembeli",$request->id_transaksi]);
+        DB::update('update transaksi_detail set status = ?, catatan_batal = ? where id_transaksi = ?', ["batal","Pembatalan oleh Pembeli", $request->id_transaksi]);
+        return true;
+    }
+
+
+
 }

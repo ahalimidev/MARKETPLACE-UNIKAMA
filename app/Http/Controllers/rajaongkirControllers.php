@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
+use Exception;
 
 class rajaongkirControllers extends Controller
 {
@@ -113,5 +116,32 @@ class rajaongkirControllers extends Controller
 
         $data['ongkir'] = json_decode($request, false);
         return $data;
+    }
+
+    public function tracking_check(Request $request)
+    {
+        $resi = $request->waybill;
+        $kurir = $request->courier;
+
+        try{
+            $request = $this->client->post('https://pro.rajaongkir.com/api/waybill', [
+                'form_params' => [
+                    'waybill' => $resi,
+                    'courier' => $kurir
+                ],
+                'headers' => [
+                    'key' => $this->token,
+                ]
+            ])->getBody()->getContents();
+
+            return $request;
+
+        }catch(RequestException $re){
+
+            return $request['rajaongkir'] = json_decode("", false);
+
+        }catch(Exception $e){
+            return $request['rajaongkir'] =json_decode("", false);
+        }
     }
 }

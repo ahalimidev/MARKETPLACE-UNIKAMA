@@ -17,7 +17,7 @@
 <div class="container">
     <div class="row">
         <!-- Column -->
-        <div class="col-lg-4 col-xlg-3 col-md-5 ">
+        <div class="col-lg-3 ">
             <div class="shadow-lg bg-white mx-auto ">
                 <figure>
                     <span>
@@ -48,7 +48,7 @@
 
         </div>
 
-        <div class="col-lg-8 col-xlg-9 col-md-7">
+        <div class="col-lg-9">
 
             <div class="shadow-lg bg-white mx-auto">
                 <!-- Nav tabs -->

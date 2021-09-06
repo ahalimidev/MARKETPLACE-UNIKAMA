@@ -5,6 +5,7 @@ use App\Http\Controllers\dashboardControllers;
 use App\Http\Controllers\keranjangControllers;
 use App\Http\Controllers\menuControllers;
 use App\Http\Controllers\tokoControllers;
+use App\Http\Controllers\transaksiControllers;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +55,17 @@ Route::post('/simpan/produk/belanja', [keranjangControllers::class,'simpan'])->n
 Route::post('/simpan/produk/belanja/stok', [keranjangControllers::class,'edit_stok_keranjang'])->name('stokkeranjang');
 Route::post('/simpan/produk/belanja/hapus', [keranjangControllers::class,'hapus_stok_keranjang'])->name('hapuskeranjang');
 Route::get('/update/produk/penawran/{id_transaksi_sementara}', [keranjangControllers::class,'penawaran'])->name('keranjangpenawaran');
+Route::post('/transaksi/konfrimasi/pembayaran/hapus', [keranjangControllers::class,'hapus_konfrimasi_pembayaran'])->name('hapuskonfrimasipembayaran');
+
+Route::get('/transaksi/detail/pembayaran/{id_transaksi}', [transaksiControllers::class,'pembayaran_tampil'])->name('tampildetailpembayaran');
+Route::get('/transaksi/detail/pengiriman/{id_transaksi}', [transaksiControllers::class,'pengriman_tampil'])->name('tampildetailpengrimanan');
+Route::get('/transaksi/detail/terima/{id_transaksi}', [transaksiControllers::class,'terima_tampil'])->name('tampildetailtampil');
+Route::get('/transaksi/detail/batal/{id_transaksi}', [transaksiControllers::class,'batal'])->name('tampildetailbatal');
+Route::get('/transaksi/tracking/{nomor_resi}', [transaksiControllers::class,'tracking'])->name('tampiltracking');
+Route::get('/transaksi/rating/komentar/{id_transaksi_detail}', [transaksiControllers::class,'beri_rating'])->name('ratingkomentar');
+Route::post('/transaksi/detail/terima', [transaksiControllers::class,'terima_barang'])->name('terimabarang');
+Route::put('/transaksi/detail/terima/komrat/{id_transaksi_detail}', [transaksiControllers::class,'komentar_dan_rating'])->name('komrat');
+
 
 
 
